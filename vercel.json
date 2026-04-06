@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "pnpm install",
+  "installCommand": "pnpm install --shamefully-hoist",
   "buildCommand": "pnpm --filter @workspace/spark-gen run build",
   "outputDirectory": "artifacts/spark-gen/dist/public",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
