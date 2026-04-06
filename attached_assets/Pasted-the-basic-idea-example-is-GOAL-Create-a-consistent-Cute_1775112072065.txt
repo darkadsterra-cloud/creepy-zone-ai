@@ -1,0 +1,73 @@
+the basic idea example is : 🎯 GOAL
+
+Create a consistent Cute Fox Stream Pack:
+
+Same character 🦊
+Same room 🎮
+Same colors 💜
+Multiple assets ..... 🧩 STEP 1 — Create Your MASTER PROMPT
+
+Copy and save this (you will reuse it every time):
+
+cute fox anime gaming room, cozy streamer desk setup, purple ambient lighting, glowing fairy lights, pastel colors, kawaii aesthetic, clean layout, desk, monitor, gaming chair, soft glow, depth of field, layered composition, foreground midground background, ultra detailed, 4k
+🧩 STEP 2 — Generate Your BASE SCENE
+
+In ZSky:
+
+👉 Paste MASTER PROMPT
+👉 Generate 5–10 images
+
+✅ Pick ONE image that:
+Shows full desk + monitor
+Not zoomed in
+Clean composition
+
+👉 This becomes your REFERENCE IMAGE
+
+🧩 STEP 3 — Lock Consistency (VERY IMPORTANT)
+
+Now we force ZSky to stay consistent.
+
+👉 Add this to EVERY future prompt:
+same fox character, same room, same colors, consistent style, same composition
+🧩 STEP 4 — Create “Starting Soon”
+cute fox anime gaming room, cozy streamer desk setup, purple ambient lighting, glowing fairy lights, pastel colors, kawaii aesthetic, clean layout, same fox character, same room, same colors, consistent style, add text "Starting Soon", centered composition, ultra detailed, 4k
+🧩 STEP 5 — Create BRB
+... same prompt ..., add text "Be Right Back"
+🧩 STEP 6 — Create Ending
+... same prompt ..., add text "Stream Ending"
+🧩 STEP 7 — Create Webcam Frame (Separate Asset)
+cute fox themed twitch webcam frame, glowing purple border, kawaii aesthetic, minimal, transparent background, clean UI, 4k
+🧩 STEP 8 — Create Chat Box
+cute fox twitch chat box overlay, glowing purple frame, minimal clean UI, kawaii style, transparent background, 4k
+🧩 STEP 9 — Fix Consistency Problem (IMPORTANT)
+
+If images look different:
+
+👉 Add stronger control words:
+
+same exact fox character design, same face, same environment, same lighting, identical style,......... 👉 What you can build is a “control panel website” that:
+
+Takes 1 reference image
+Accepts 10+ prompts
+Sends them to an AI model (like Nano Banana / Stable Diffusion APIs)
+Generates:
+Images
+Overlays
+Even videos (via APIs)
+Shows everything in one dashboard ................. ✅ Input
+1 reference image
+10 prompts
+✅ Output
+10 images (same style)
+overlays
+green screen memes
+video loops
+✅ UI
+All results in ONE window ..... To make it powerful:
+
+🔥 Add:
+“Generate 10 variations” button
+Style locking (same seed / reference)
+Batch export (ZIP download)
+Auto naming (starting_soon, brb, etc.) ......... add more aesthetic styles list upto 50 themes to select like horror, jump scare, ghosts, vampires, marvel characters transforming, aliens, blood, fighting, action, war, tap tap, romance, kissing, comedy, animations, dancing, etc etc.... also put an option to select one of the generated images and make an animating video, also put all the aesthetic styles to select from the video styles minimum50. a display section to play the generation of images or video. also can also put effects on images, like animating effects as many as the duration of the video like if minimum 6 sec video can put 3-6 video effects. ok now also put a register and login interface for people to authenticate on the website through email or google authentication. well the provided base image that i upload should also be animating on the website at different sections, and communicating with the user virtually and responding like an AI agent. also a surprising effect, at the end put a donation box to pay a donation to the website if it is usefull for public, the account number of the donation box is with the payoneer payment system. put my email address cine.genesis.studio@gmail.com for people to contact me and my payoneer account ID number visible to public which is ( 74660788 )

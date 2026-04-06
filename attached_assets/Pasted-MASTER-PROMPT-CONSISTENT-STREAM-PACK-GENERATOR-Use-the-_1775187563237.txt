@@ -1,0 +1,62 @@
+MASTER PROMPT — CONSISTENT STREAM PACK GENERATOR
+
+Use the provided reference image as the MASTER REFERENCE. The character, environment, lighting, color palette, camera angle, and art style must remain 100% consistent across all generations.
+
+STRICT CONSISTENCY RULES:
+
+* The SAME character must appear in every image (same face, outfit, colors, proportions, identity)
+* The SAME environment must remain unchanged (same room, same background objects, same layout, same lighting)
+* The SAME artistic style must be preserved (no variation in rendering style)
+* DO NOT redesign or reinterpret the character or environment
+* DO NOT change color theme, mood, or composition
+* ONLY change character pose, action, and slight camera framing
+
+ENVIRONMENT LOCK:
+If the reference image shows a room (e.g., gaming room, ocean, forest, etc.), ALL generated images must take place in the EXACT same environment with identical layout and elements.
+
+CHARACTER LOCK:
+Character must remain identical across all scenes. No variation in hairstyle, face, outfit, or body.
+
+TEXT RULE:
+Each image must ONLY contain its specific title text:
+
+* No extra text
+* No additional descriptions
+* Clean, bold, centered typography
+
+---
+
+GENERATE THE FOLLOWING 6 SCENES:
+
+1. STARTING SOON
+   The character is preparing to start the stream. Subtle movement, idle pose, or setup action. Calm anticipation mood.
+
+2. BE RIGHT BACK
+   The character is on a short break. Show natural break action (e.g., sitting relaxed, holding a cup, walking away slightly).
+
+3. STREAM ENDING
+   The character is finishing the stream. Show closing action (e.g., waving goodbye, turning away, shutting setup).
+
+4. WEBCAM OVERLAY
+   Design as a frame composition. The character appears positioned around or behind a central empty frame area (space for webcam).
+
+5. CHAT BOX
+   Vertical or side layout. Character interacts with chat environment (gesturing, pointing, reacting).
+
+6. ALERT BOX (NEW FOLLOWER)
+   The character reacts to a new follower event. Show welcoming action (clapping, greeting, excited reaction).
+
+---
+
+STYLE & QUALITY:
+
+* Ultra high quality
+* Cinematic lighting
+* Consistent color grading
+* Professional Twitch overlay design
+* Clean composition with UI-friendly layout
+
+---
+
+FINAL INSTRUCTION:
+Maintain TOTAL visual consistency across all outputs. The result must look like a single unified stream pack, not separate unrelated images.

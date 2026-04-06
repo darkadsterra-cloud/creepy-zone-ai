@@ -1,0 +1,103 @@
+You are an expert full-stack developer. Fix and upgrade my existing AI Stream Pack Generator web app completely.
+
+CRITICAL ISSUES TO FIX:
+
+1. VIDEO GENERATION NOT WORKING:
+
+* Video animation is not generating anything after selecting an image
+* Implement a working video generation pipeline
+* When user selects an image, the system must:
+
+  * Pass selected image as reference
+  * Apply selected theme (from theme library)
+  * Generate animated video output
+* If real AI model is unavailable, simulate working output (DO NOT leave broken state)
+* Add loading state + progress indicator
+* Ensure final video is downloadable
+
+2. IMAGE GENERATION CONSISTENCY (MOST IMPORTANT):
+
+* ALL generated images must maintain SAME CHARACTER and SAME ENVIRONMENT
+* Implement strict consistency rule:
+
+  * Same face, same outfit, same identity
+  * Same background, same room layout
+* Only change pose, expression, and action
+* Apply a MASTER PROMPT automatically in backend for all generations
+
+MASTER PROMPT RULE (HARD ENFORCE):
+
+* Do not change character identity
+* Do not change environment
+* Only change action based on scene
+* Scenes: Starting Soon, Be Right Back, Stream Ending, Webcam Overlay, Chat Box, Alert Box
+
+3. ADD MASTER PROMPT SECTION (UI):
+
+* Add a section named "Master Prompt"
+* Show the master prompt in a copyable text box
+* Users can copy and use it
+* Auto-apply it during generation
+
+4. LOGIN & AUTH SYSTEM:
+
+* Remove "Enter your name" system
+* Add proper authentication:
+
+  * Email + Password login/register
+  * Google authentication
+* Maintain user session
+* Use secure authentication (JWT or Firebase Auth)
+
+5. PAYMENT SYSTEM:
+
+* When user clicks a plan → open Payoneer payment flow
+* Payment email: [kaleemji788@gmail.com](mailto:kaleemji788@gmail.com)
+* Simulate Payoneer redirect if real integration not possible
+* After payment → unlock premium features
+
+6. UI FIXES:
+
+* Fix contact email display:
+  [cine.genesis.studio@gmail.com](mailto:cine.genesis.studio@gmail.com) → show in one line, proper font size
+* Update ALL year references:
+  Replace "2025" with "2026"
+* Improve layout spacing and typography
+
+7. VIDEO THEMES SYSTEM:
+
+* Add theme selection before video generation
+* At least 50 themes (lava, vampire, horror, jumpscare, cyberpunk, etc.)
+* Selected theme must affect:
+
+  * Visual animation
+  * Lighting
+  * Mood
+  * Motion
+
+8. AUDIO IN VIDEO:
+
+* Automatically generate or assign audio based on theme
+* Example:
+
+  * Horror → dark ambient sound
+  * Lava → rumbling/fire sound
+* Sync audio with video
+
+9. DOWNLOAD SYSTEM:
+
+* Allow user to:
+
+  * Download images individually
+  * Download full bundle (ZIP)
+  * Download generated videos
+
+10. GENERAL REQUIREMENTS:
+
+* App must be fully functional
+* No broken buttons
+* No empty responses
+* Add fallback logic everywhere
+* Clean and professional SaaS UI
+
+Ensure everything works end-to-end without errors.

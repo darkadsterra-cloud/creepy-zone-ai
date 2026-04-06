@@ -1,0 +1,127 @@
+Fix and upgrade the existing AI web app "Creepy Zone – Stream Asset Generator" with the following missing features and improvements.
+
+-----------------------------------------
+1. IMAGE UPLOAD + MASTER IMAGE SYSTEM
+-----------------------------------------
+- Add a clear "Upload Image" button (from PC)
+- Allow user to:
+   → Upload their own character image
+   → OR generate a Master Image using AI
+
+- After upload/generation:
+   → Set that image as MASTER REFERENCE
+   → Display it on top as “Selected Character”
+
+-----------------------------------------
+2. DOWNLOAD SYSTEM (CRITICAL)
+-----------------------------------------
+- Add buttons:
+   → Download Individual Image
+   → Download Individual Video
+   → Download Full Bundle (ZIP)
+
+- Bundle ZIP must include:
+   → Starting Soon
+   → Be Right Back
+   → Stream Ending
+   → Webcam Overlay
+   → Chat Box
+   → Alert Box
+
+-----------------------------------------
+3. REGENERATE BUTTON
+-----------------------------------------
+- Add “Regenerate” button for:
+   → Each image
+   → Each video
+
+- Regenerate must:
+   → Keep same character
+   → Keep same environment
+   → Only change pose/action
+
+-----------------------------------------
+4. THEME PROMPT SYSTEM (VERY IMPORTANT)
+-----------------------------------------
+- Each color theme box MUST have:
+   → 50 pre-written prompts (internally stored)
+
+- When user selects a theme:
+   → One prompt auto-loads
+   → User can:
+       → Edit prompt manually
+       → OR generate randomly from 50 prompts
+
+- Also add:
+   → “Custom Prompt Input” field for each theme
+
+-----------------------------------------
+5. PROMPT QUALITY RULE
+-----------------------------------------
+Every prompt must include:
+- Character consistency instruction
+- Environment lock
+- Action-based variation
+
+Example logic:
+“Use same character, same room, same lighting, only change action to [scene]”
+
+-----------------------------------------
+6. LANDING PAGE INTRO VIDEO
+-----------------------------------------
+- Add hero section video on landing page
+- Use uploaded video file (Creepzone.mp4)
+- Auto-play muted loop
+- Add overlay text:
+   → "Create AI Stream Packs Instantly"
+
+-----------------------------------------
+7. BACKGROUND GLOW + THEME REACTION
+-----------------------------------------
+- Full page background image must:
+   → Have subtle glow animation
+   → React to mouse movement
+
+- When user selects a theme:
+   → Background changes dynamically
+   → Show animated glow based on theme
+
+Examples:
+- Horror → dark fog + red pulse glow
+- Fire → orange/red flame glow
+- Neon → cyberpunk glow lines
+- Action → motion blur + energy waves
+
+-----------------------------------------
+8. INTERACTIVE HOVER EFFECT
+-----------------------------------------
+- On mouse hover:
+   → Background slightly pulses
+   → UI glows stronger
+   → Smooth animation (no lag)
+
+-----------------------------------------
+9. UI FIXES
+-----------------------------------------
+- Add missing buttons clearly:
+   → Upload
+   → Generate
+   → Regenerate
+   → Download
+
+- Make layout clean and responsive
+
+-----------------------------------------
+10. FINAL GOAL
+-----------------------------------------
+Make the system fully usable:
+
+User flow:
+1. Upload OR generate character
+2. Select theme
+3. Auto-load prompt OR customize
+4. Generate full bundle
+5. Regenerate if needed
+6. Download images/videos or full ZIP
+
+Ensure everything works smoothly with no missing buttons or broken flows.

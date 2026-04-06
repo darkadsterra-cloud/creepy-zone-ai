@@ -1,0 +1,91 @@
+Build a "Prompt Library" system inside the AI Stream Pack Generator.
+
+FEATURES REQUIRED:
+
+1. PROMPT LIBRARY UI:
+
+* Create a new section called "Prompt Library"
+* Users can:
+
+  * Browse themes
+  * Select a theme
+  * Apply it to image or video generation
+
+2. ADD 50 THEMES (ENVIRONMENT STYLES):
+   Include themes like:
+
+* Lava Inferno
+* Dark Vampire Castle
+* Horror Forest
+* Jumpscare Nightmare
+* Cyberpunk Neon City
+* Apocalypse World
+* Haunted Mansion
+* Blood Moon Ritual
+* Sci-Fi Space Station
+* Underwater Abyss
+* Fire Storm Arena
+* Ice Kingdom
+* Shadow Realm
+* Demon Battlefield
+* Glitch Horror
+  (Continue until 50 themes total)
+
+3. IMAGE GENERATION PROMPTS (AUTO APPLY):
+   For each theme, create prompt variation:
+
+STRUCTURE:
+
+* Keep SAME character
+* Keep SAME environment layout
+* Apply theme lighting + mood
+* Change only color grading and atmosphere
+
+4. VIDEO GENERATION PROMPTS (50 PROMPTS):
+   Generate 50 different cinematic prompts based on themes.
+
+Each prompt must:
+
+* Animate selected image
+* Add motion (camera movement, particles, effects)
+* Apply theme-based lighting
+* Include cinematic behavior
+
+EXAMPLE STRUCTURE:
+"A dark horror animation where the character stands still while fog moves around, glowing eyes flicker, camera slowly zooms in, cinematic lighting, embers floating"
+
+Repeat similar logic for all 50 themes with variation.
+
+5. USER FLOW:
+
+* User selects generated image
+* User selects theme
+* User clicks "Generate Video"
+* System applies:
+
+  * Selected image
+  * Selected theme prompt
+  * Generates video
+
+6. AUDIO SYSTEM:
+
+* Each theme has matching audio:
+
+  * Horror → dark ambient
+  * Cyberpunk → electronic
+  * Lava → fire/rumble
+* Attach audio automatically
+
+7. CONSISTENCY RULE (VERY IMPORTANT):
+
+* Character MUST remain identical
+* Environment MUST remain identical
+* Only effects, lighting, motion change
+
+8. DOWNLOAD:
+
+* Each generated video downloadable
+* Store results per user session
+
+FINAL GOAL:
+Make this a powerful creative tool where user can generate consistent stream packs and animated videos using selectable themes and prompts.

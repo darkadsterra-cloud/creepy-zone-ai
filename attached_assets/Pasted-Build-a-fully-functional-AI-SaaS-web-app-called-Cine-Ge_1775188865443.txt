@@ -1,0 +1,154 @@
+Build a fully functional AI SaaS web app called "Cine Genesis Studio" for generating stream packs (images + videos) with strict character consistency.
+
+🔥 CORE REQUIREMENTS:
+
+1. FIX IMAGE + VIDEO GENERATION:
+- Ensure AI models are correctly connected and working (image + video both).
+- If generation fails, show proper error logs in UI.
+- Add loading state + progress bar for generation.
+- Allow user to:
+  → Select a generated image
+  → Choose a theme (from 50 themes)
+  → Generate multiple videos from same image
+
+- Video generation MUST:
+  → Animate selected image
+  → Apply selected theme (lava, horror, vampire, jumpscare, neon, etc.)
+  → Auto-generate matching background audio (based on mood/theme)
+  → Attach audio to video
+  → Allow download button after generation
+
+---------------------------------------------------
+
+2. STRICT CHARACTER CONSISTENCY SYSTEM:
+- Implement a “Master Reference Lock System”
+- First generated image becomes MASTER REFERENCE
+- All future generations MUST:
+  → Keep same character face, outfit, pose identity
+  → Keep same environment (room, desk, lighting, etc.)
+  → Only change ACTION (pose/activity)
+
+- Bundle generation must include:
+  → Starting Soon
+  → Be Right Back
+  → Stream Ending
+  → Webcam Overlay
+  → Chat Box
+  → Alert Box (New Followers)
+
+- Each scene must:
+  → Have same character
+  → Same environment
+  → Only action changes (e.g., drinking tea, waving, ending stream)
+
+---------------------------------------------------
+
+3. PROMPT LIBRARY SYSTEM:
+Create a “Prompt Library” section where users can:
+- Select themes (50 themes)
+- Select actions (stream scenes)
+- Copy ready-made prompts
+
+Include:
+- 50 IMAGE PROMPTS (for different themes)
+- 50 VIDEO PROMPTS (with motion + audio instructions)
+
+Each prompt must:
+- Enforce character consistency
+- Include environment lock
+- Be optimized for high-quality generation
+
+---------------------------------------------------
+
+4. FLOATING AI CHAT AGENT:
+- Add floating chat icon (bottom right corner)
+- Icon = same as website main image/logo
+- Smooth floating animation
+
+On click:
+- Open chat window
+- AI agent behaves like human:
+  → Welcomes user
+  → Explains website usage
+  → Helps with:
+     - How to generate images
+     - How to generate videos
+     - Where prompt library is
+     - Payment help
+     - Download help
+  → Friendly tone, jokes, greetings, goodbye messages
+
+---------------------------------------------------
+
+5. AUTHENTICATION SYSTEM:
+Replace “Enter Name” with:
+- Login / Register system
+
+Include:
+- Email + Password login
+- Google Authentication
+
+---------------------------------------------------
+
+6. PAYMENT SYSTEM:
+- When user clicks a plan:
+  → Open Payoneer payment flow
+- Use this Payoneer email:
+  kaleemji788@gmail.com
+
+---------------------------------------------------
+
+7. UI / UX IMPROVEMENTS:
+- Add strong glowing hover effects:
+  → Buttons
+  → Cards
+  → Tabs
+
+- Glow style:
+  → Neon / gaming UI
+  → Smooth transitions
+
+---------------------------------------------------
+
+8. CONTACT + FOOTER FIX:
+- Show email in one line:
+  cine.genesis.studio@gmail.com
+
+- Fix footer year everywhere:
+  Change to: 2026
+
+---------------------------------------------------
+
+9. VIDEO GENERATION THEMES:
+Add 50 selectable themes before generation, like:
+- Lava Hell
+- Vampire Castle
+- Horror Forest
+- Cyberpunk Neon
+- Dark Dungeon
+- Apocalypse
+- Fire Storm
+- Ghost Realm
+- Blood Moon
+- Sci-Fi Space
+... (total 50)
+
+---------------------------------------------------
+
+10. DOWNLOAD SYSTEM:
+- Every generated image & video:
+  → Must have download button
+  → Proper file naming
+  → High quality output
+
+---------------------------------------------------
+
+🎯 FINAL GOAL:
+A fully working AI tool where:
+- User generates a character
+- System locks character consistency
+- Generates full stream bundle
+- Converts images into themed animated videos with sound
+- Everything works smoothly with no generation failure
+
+Ensure everything is production-ready, bug-free, and visually premium.

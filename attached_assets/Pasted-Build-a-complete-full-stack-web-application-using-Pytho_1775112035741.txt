@@ -1,0 +1,59 @@
+Build a complete full-stack web application using Python (Flask) for backend and HTML, CSS, JavaScript for frontend.
+
+The app should be called "AI Stream Pack Generator" and must be fully functional, simple to run, and free to use (no paid dependencies required).
+
+CORE FEATURES:
+
+User Interface:
+Clean modern SaaS-style dashboard
+Dark theme design
+Input field to upload a reference image
+Textarea to enter a base prompt
+Buttons:
+"Generate Images"
+"Generate Video"
+"Download ZIP"
+Section to display generated images in a responsive grid
+Video player section for generated video
+Image Generation Logic:
+When user enters a base prompt, automatically create multiple variations internally:
+Starting Soon screen
+Be Right Back screen
+Stream Ending screen
+Webcam overlay
+Chat box overlay
+Alert box
+Simulate image generation if real AI is not available (use placeholder images or mock results)
+Maintain consistent style across outputs based on base prompt and optional reference image
+Video Generation:
+Simulate video generation (use sample video URL or placeholder)
+Display video in video player
+Download Feature:
+Collect all generated images
+Create a ZIP file
+Allow user to download all assets at once
+Backend (Flask):
+Routes:
+"/" → render main page
+"/generate" → handle prompt and return multiple image URLs
+"/generate-video" → return video URL
+"/download" → generate and return ZIP file
+Frontend Behavior:
+Use JavaScript fetch API for communication
+Convert uploaded image to base64
+Show loading indicator while generating
+Dynamically display results
+Store generated assets for download
+Styling:
+Dark UI
+Card-based layout
+Image grid with rounded corners
+Responsive design
+Project Structure:
+app.py
+templates/index.html
+static/script.js
+static/style.css
+
+Make sure the project runs immediately in Replit without errors and does not require any paid services. Keep everything simple, clean, and beginner-friendly but functional. also use the reference image on website as GUI style and icons.
+

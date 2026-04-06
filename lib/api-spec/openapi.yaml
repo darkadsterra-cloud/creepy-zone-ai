@@ -1,0 +1,399 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: SPARK GEN API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Auth operations
+  - name: generate
+    description: Generation operations
+  - name: payments
+    description: Payment operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/session:
+    post:
+      operationId: createOrGetSession
+      tags: [auth]
+      summary: Create or get existing user session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionRequest"
+      responses:
+        "200":
+          description: Session info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionInfo"
+
+  /auth/session/{sessionId}:
+    get:
+      operationId: getSession
+      tags: [auth]
+      summary: Get session by ID
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Session info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionInfo"
+
+  /generate/image:
+    post:
+      operationId: generateImage
+      tags: [generate]
+      summary: Generate stream pack images
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateImageRequest"
+      responses:
+        "200":
+          description: Generated images
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenerateImageResponse"
+
+  /generate/video:
+    post:
+      operationId: generateVideo
+      tags: [generate]
+      summary: Generate animated video
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateVideoRequest"
+      responses:
+        "200":
+          description: Generated video
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenerateVideoResponse"
+
+  /generate/history/{sessionId}:
+    get:
+      operationId: getGenerationHistory
+      tags: [generate]
+      summary: Get generation history
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Generation history
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenerationHistoryResponse"
+
+  /payments/create:
+    post:
+      operationId: createPayment
+      tags: [payments]
+      summary: Record a Payoneer payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePaymentRequest"
+      responses:
+        "200":
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentRecord"
+
+  /payments/history/{sessionId}:
+    get:
+      operationId: getPaymentHistory
+      tags: [payments]
+      summary: Get payment history for session
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Payment history
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentHistoryResponse"
+
+  /payments/verify/{sessionId}:
+    get:
+      operationId: verifyPlan
+      tags: [payments]
+      summary: Verify active subscription plan
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Plan status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlanStatus"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    SessionRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        fingerprint:
+          type: string
+      required:
+        - username
+        - fingerprint
+
+    SessionInfo:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        username:
+          type: string
+        createdAt:
+          type: string
+        trialEndsAt:
+          type: string
+        planType:
+          type: string
+          nullable: true
+        planExpiresAt:
+          type: string
+          nullable: true
+        isTrialActive:
+          type: boolean
+        isPlanActive:
+          type: boolean
+      required:
+        - sessionId
+        - username
+        - createdAt
+        - trialEndsAt
+        - isTrialActive
+        - isPlanActive
+
+    GenerateImageRequest:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        prompt:
+          type: string
+        aesthetic:
+          type: string
+        referenceImageBase64:
+          type: string
+          nullable: true
+      required:
+        - sessionId
+        - prompt
+        - aesthetic
+
+    GenerateImageResponse:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneratedImage"
+        generationId:
+          type: string
+      required:
+        - images
+        - generationId
+
+    GeneratedImage:
+      type: object
+      properties:
+        url:
+          type: string
+        label:
+          type: string
+        dimensions:
+          type: string
+      required:
+        - url
+        - label
+        - dimensions
+
+    GenerateVideoRequest:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        prompt:
+          type: string
+        style:
+          type: string
+        sourceImageUrl:
+          type: string
+          nullable: true
+      required:
+        - sessionId
+        - prompt
+        - style
+
+    GenerateVideoResponse:
+      type: object
+      properties:
+        videoUrl:
+          type: string
+        generationId:
+          type: string
+      required:
+        - videoUrl
+        - generationId
+
+    GenerationHistoryResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/GenerationHistoryItem"
+      required:
+        - items
+
+    GenerationHistoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        prompt:
+          type: string
+        aesthetic:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - type
+        - prompt
+        - aesthetic
+        - createdAt
+
+    CreatePaymentRequest:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        plan:
+          type: string
+          enum: [weekly, monthly]
+        payoneerTransactionId:
+          type: string
+        amount:
+          type: number
+      required:
+        - sessionId
+        - plan
+        - payoneerTransactionId
+        - amount
+
+    PaymentRecord:
+      type: object
+      properties:
+        id:
+          type: string
+        plan:
+          type: string
+        amount:
+          type: number
+        status:
+          type: string
+        createdAt:
+          type: string
+        expiresAt:
+          type: string
+      required:
+        - id
+        - plan
+        - amount
+        - status
+        - createdAt
+        - expiresAt
+
+    PaymentHistoryResponse:
+      type: object
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentRecord"
+      required:
+        - payments
+
+    PlanStatus:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+        planType:
+          type: string
+          nullable: true
+        expiresAt:
+          type: string
+          nullable: true
+      required:
+        - isActive

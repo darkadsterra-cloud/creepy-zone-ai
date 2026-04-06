@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "SPARK GEN - AI Stream Pack Generator"
+version = "1.0.0"
+id = "artifacts/spark-gen"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23424
+
+[services.development]
+run = "pnpm --filter @workspace/spark-gen run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/spark-gen", "run", "build" ]
+publicDir = "artifacts/spark-gen/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23424"
+BASE_PATH = "/"
