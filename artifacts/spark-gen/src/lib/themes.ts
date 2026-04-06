@@ -1,4 +1,7 @@
-export const IMAGE_THEMES = [
+type Theme = { name: string; colors: [string, string] };
+type ThemeGroup = { group: string; themes: Theme[] };
+
+const CORE_IMAGE_THEMES: ThemeGroup[] = [
   {
     group: "FIRE & DARK SERIES",
     themes: [
@@ -105,7 +108,7 @@ export const IMAGE_THEMES = [
   },
 ];
 
-export const VIDEO_THEMES = [
+const CORE_VIDEO_THEMES: ThemeGroup[] = [
   {
     group: "CINEMATIC",
     themes: [
@@ -198,3 +201,67 @@ export const VIDEO_THEMES = [
     ],
   },
 ];
+
+function chunkThemes(themes: Theme[], size: number, titlePrefix: string): ThemeGroup[] {
+  const groups: ThemeGroup[] = [];
+  for (let i = 0; i < themes.length; i += size) {
+    groups.push({
+      group: `${titlePrefix} ${String(groups.length + 1).padStart(2, "0")}`,
+      themes: themes.slice(i, i + size),
+    });
+  }
+  return groups;
+}
+
+function createGeneratedThemes(limit: number, nounBase: string): Theme[] {
+  const adjectives = [
+    "Abyssal", "Arcane", "Astral", "Blood", "Celestial", "Chrono", "Crimson", "Cryptic",
+    "Cyber", "Dark", "Doom", "Dream", "Ember", "Ethereal", "Feral", "Frost", "Ghost",
+    "Glitch", "Infernal", "Iron", "Lunar", "Mythic", "Nebula", "Neon", "Night", "Obsidian",
+    "Phantom", "Primal", "Quantum", "Rogue", "Runic", "Savage", "Shadow", "Solar", "Spectral",
+    "Storm", "Toxic", "Twilight", "Ultra", "Void", "Wild", "Wraith",
+  ];
+  const nouns = [
+    `${nounBase} Arena`, `${nounBase} Dungeon`, `${nounBase} Citadel`, `${nounBase} Dominion`,
+    `${nounBase} Frontier`, `${nounBase} Harbor`, `${nounBase} Legacy`, `${nounBase} Matrix`,
+    `${nounBase} Nexus`, `${nounBase} Outpost`, `${nounBase} Protocol`, `${nounBase} Realm`,
+    `${nounBase} Rift`, `${nounBase} Sanctuary`, `${nounBase} Signal`, `${nounBase} Storm`,
+    `${nounBase} Temple`, `${nounBase} Throne`, `${nounBase} Vault`, `${nounBase} Zone`,
+  ];
+  const palettes: Array<[string, string]> = [
+    ["#ff4500", "#8b0000"], ["#00ffff", "#000066"], ["#39ff14", "#003300"], ["#4b0082", "#0f0f0f"],
+    ["#cc0000", "#1a1a1a"], ["#ff00ff", "#2b004d"], ["#00b7ff", "#002b4d"], ["#ffcc00", "#4d2d00"],
+    ["#a8a8a8", "#111111"], ["#7df9ff", "#003d4d"], ["#fd5e53", "#460000"], ["#99ccff", "#1a3352"],
+  ];
+
+  const generated: Theme[] = [];
+  const names = new Set<string>();
+  let paletteIndex = 0;
+
+  for (const adjective of adjectives) {
+    for (const noun of nouns) {
+      const name = `${adjective} ${noun}`;
+      if (names.has(name)) continue;
+      names.add(name);
+      generated.push({ name, colors: palettes[paletteIndex % palettes.length] });
+      paletteIndex += 1;
+      if (generated.length >= limit) return generated;
+    }
+  }
+  return generated;
+}
+
+const GENERATED_IMAGE_THEMES = chunkThemes(
+  createGeneratedThemes(200, "Stream"),
+  20,
+  "PRO IMAGE BUNDLE",
+);
+
+const GENERATED_VIDEO_THEMES = chunkThemes(
+  createGeneratedThemes(120, "Motion"),
+  20,
+  "PRO VIDEO BUNDLE",
+);
+
+export const IMAGE_THEMES = [...CORE_IMAGE_THEMES, ...GENERATED_IMAGE_THEMES];
+export const VIDEO_THEMES = [...CORE_VIDEO_THEMES, ...GENERATED_VIDEO_THEMES];

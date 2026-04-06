@@ -3,5 +3,8 @@
   "installCommand": "pnpm install --shamefully-hoist",
   "buildCommand": "pnpm --filter @workspace/spark-gen run build",
   "outputDirectory": "artifacts/spark-gen/dist/public",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

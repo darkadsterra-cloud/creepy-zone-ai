@@ -13,9 +13,28 @@ import {
   GetGenerationHistoryParams,
   GetGenerationHistoryResponse,
 } from "@workspace/api-zod";
-import { generateImageBuffer, editImages } from "@workspace/integrations-openai-ai-server/image";
 
 const router: IRouter = Router();
+type ImageAiModule = typeof import("@workspace/integrations-openai-ai-server/image");
+let imageAiModulePromise: Promise<ImageAiModule> | null = null;
+
+function getImageAiModule(): Promise<ImageAiModule> {
+  if (!imageAiModulePromise) {
+    imageAiModulePromise = import("@workspace/integrations-openai-ai-server/image");
+  }
+  return imageAiModulePromise;
+}
+
+function generationErrorMessage(err: unknown): string {
+  const message = err instanceof Error ? err.message : "Unknown generation error";
+  if (
+    message.includes("AI_INTEGRATIONS_OPENAI_BASE_URL") ||
+    message.includes("AI_INTEGRATIONS_OPENAI_API_KEY")
+  ) {
+    return "AI provider is not configured on the server. Add AI integration environment variables.";
+  }
+  return message;
+}
 
 async function canGenerate(sessionId: string): Promise<boolean> {
   const sessions = await db.select().from(sessionsTable).where(eq(sessionsTable.id, sessionId)).limit(1);
@@ -77,6 +96,7 @@ async function generateWithOptionalReference(
   masterImageUrl: string | undefined,
   size: "1024x1024" | "1792x1024" = "1024x1024"
 ): Promise<Buffer> {
+  const { generateImageBuffer, editImages } = await getImageAiModule();
   if (masterImageUrl && masterImageUrl.startsWith("data:image")) {
     const match = masterImageUrl.match(/^data:([^;]+);base64,(.+)$/);
     if (match) {
@@ -94,116 +114,130 @@ async function generateWithOptionalReference(
 }
 
 router.post("/image", async (req, res) => {
-  const body = GenerateImageBody.parse(req.body);
-  const masterImageUrl: string | undefined = req.body.masterImageUrl;
+  try {
+    const body = GenerateImageBody.parse(req.body);
+    const masterImageUrl: string | undefined = req.body.masterImageUrl;
 
-  const allowed = await canGenerate(body.sessionId);
-  if (!allowed) {
-    return res.status(403).json({ error: "Trial expired. Please subscribe to continue." });
+    const allowed = await canGenerate(body.sessionId);
+    if (!allowed) {
+      return res.status(403).json({ error: "Trial expired. Please subscribe to continue." });
+    }
+
+    const generationId = randomUUID();
+    const aesthetic = body.aesthetic || "Dark Horror";
+    const userPrompt = body.prompt || "dark creepy horror gaming character";
+
+    const buffers = await Promise.all(
+      IMAGE_SETS.map((set) =>
+        generateWithOptionalReference(buildPrompt(set, aesthetic, userPrompt), masterImageUrl)
+      )
+    );
+
+    const images = IMAGE_SETS.map((set, i) => ({
+      url: `data:image/png;base64,${buffers[i].toString("base64")}`,
+      label: set.label,
+      dimensions: set.dimensions,
+    }));
+
+    await db.insert(generationsTable).values({
+      id: generationId,
+      sessionId: body.sessionId,
+      type: "image",
+      prompt: body.prompt,
+      aesthetic: body.aesthetic,
+      resultUrls: JSON.stringify(images.map(() => "[base64]")),
+    });
+
+    res.json({ images, generationId });
+  } catch (err) {
+    res.status(503).json({ error: generationErrorMessage(err) });
   }
-
-  const generationId = randomUUID();
-  const aesthetic = body.aesthetic || "Dark Horror";
-  const userPrompt = body.prompt || "dark creepy horror gaming character";
-
-  const buffers = await Promise.all(
-    IMAGE_SETS.map((set) =>
-      generateWithOptionalReference(buildPrompt(set, aesthetic, userPrompt), masterImageUrl)
-    )
-  );
-
-  const images = IMAGE_SETS.map((set, i) => ({
-    url: `data:image/png;base64,${buffers[i].toString("base64")}`,
-    label: set.label,
-    dimensions: set.dimensions,
-  }));
-
-  await db.insert(generationsTable).values({
-    id: generationId,
-    sessionId: body.sessionId,
-    type: "image",
-    prompt: body.prompt,
-    aesthetic: body.aesthetic,
-    resultUrls: JSON.stringify(images.map(() => "[base64]")),
-  });
-
-  res.json({ images, generationId });
 });
 
 router.post("/scene", async (req, res) => {
-  const { sessionId, prompt, aesthetic, sceneIndex, masterImageUrl } = req.body as {
-    sessionId: string;
-    prompt: string;
-    aesthetic: string;
-    sceneIndex: number;
-    masterImageUrl?: string;
-  };
+  try {
+    const { sessionId, prompt, aesthetic, sceneIndex, masterImageUrl } = req.body as {
+      sessionId: string;
+      prompt: string;
+      aesthetic: string;
+      sceneIndex: number;
+      masterImageUrl?: string;
+    };
 
-  const allowed = await canGenerate(sessionId);
-  if (!allowed) {
-    return res.status(403).json({ error: "Trial expired. Please subscribe to continue." });
+    const allowed = await canGenerate(sessionId);
+    if (!allowed) {
+      return res.status(403).json({ error: "Trial expired. Please subscribe to continue." });
+    }
+
+    const set = IMAGE_SETS[sceneIndex];
+    if (!set) {
+      return res.status(400).json({ error: "Invalid scene index." });
+    }
+
+    const promptText = buildPrompt(set, aesthetic || "Dark Horror", prompt || "dark horror character");
+    const buffer = await generateWithOptionalReference(promptText, masterImageUrl);
+    const url = `data:image/png;base64,${buffer.toString("base64")}`;
+
+    res.json({ url, label: set.label, tag: set.tag, dimensions: set.dimensions, index: sceneIndex });
+  } catch (err) {
+    res.status(503).json({ error: generationErrorMessage(err) });
   }
-
-  const set = IMAGE_SETS[sceneIndex];
-  if (!set) {
-    return res.status(400).json({ error: "Invalid scene index." });
-  }
-
-  const promptText = buildPrompt(set, aesthetic || "Dark Horror", prompt || "dark horror character");
-  const buffer = await generateWithOptionalReference(promptText, masterImageUrl);
-  const url = `data:image/png;base64,${buffer.toString("base64")}`;
-
-  res.json({ url, label: set.label, tag: set.tag, dimensions: set.dimensions, index: sceneIndex });
 });
 
 router.post("/video", async (req, res) => {
-  const body = GenerateVideoBody.parse(req.body);
-  const allowed = await canGenerate(body.sessionId);
-  if (!allowed) {
-    return res.status(403).json({ error: "Trial expired. Please subscribe to continue." });
-  }
-
-  const generationId = randomUUID();
-  const style = body.style || "Epic Reveal";
-  const promptBase = body.prompt || "dark cinematic streaming intro animation";
-
-  let videoUrl: string;
-
   try {
-    if (body.sourceImageUrl && body.sourceImageUrl.startsWith("data:image")) {
-      const match = body.sourceImageUrl.match(/^data:([^;]+);base64,(.+)$/);
-      if (match) {
-        const tmpFile = path.join(os.tmpdir(), `src_${randomUUID()}.png`);
-        fs.writeFileSync(tmpFile, Buffer.from(match[2], "base64"));
-        const editPrompt = `${MASTER_CONSISTENCY_PREFIX} Animation style: ${style}. Transform this stream overlay into a dramatic cinematic animated intro concept. ${promptBase}. Epic motion effects, particle systems, dramatic lighting changes, camera zoom effect, professional streaming animation style. Keep the same character and environment but add dynamic energy and movement.`;
-        const editedBuffer = await editImages([tmpFile], editPrompt);
-        if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile);
-        videoUrl = `data:image/png;base64,${editedBuffer.toString("base64")}`;
+    const body = GenerateVideoBody.parse(req.body);
+    const allowed = await canGenerate(body.sessionId);
+    if (!allowed) {
+      return res.status(403).json({ error: "Trial expired. Please subscribe to continue." });
+    }
+
+    const generationId = randomUUID();
+    const style = body.style || "Epic Reveal";
+    const promptBase = body.prompt || "dark cinematic streaming intro animation";
+
+    let videoUrl: string;
+
+    try {
+      const { generateImageBuffer, editImages } = await getImageAiModule();
+      if (body.sourceImageUrl && body.sourceImageUrl.startsWith("data:image")) {
+        const match = body.sourceImageUrl.match(/^data:([^;]+);base64,(.+)$/);
+        if (match) {
+          const tmpFile = path.join(os.tmpdir(), `src_${randomUUID()}.png`);
+          fs.writeFileSync(tmpFile, Buffer.from(match[2], "base64"));
+          const editPrompt = `${MASTER_CONSISTENCY_PREFIX} Animation style: ${style}. Transform this stream overlay into a dramatic cinematic animated intro concept. ${promptBase}. Epic motion effects, particle systems, dramatic lighting changes, camera zoom effect, professional streaming animation style. Keep the same character and environment but add dynamic energy and movement.`;
+          const editedBuffer = await editImages([tmpFile], editPrompt);
+          if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile);
+          videoUrl = `data:image/png;base64,${editedBuffer.toString("base64")}`;
+        } else {
+          throw new Error("Could not parse source image");
+        }
       } else {
-        throw new Error("Could not parse source image");
+        const videoPrompt = `${MASTER_CONSISTENCY_PREFIX} Style: ${style}. Cinematic streaming intro frame: ${promptBase}. Epic dramatic scene, particle effects, dynamic lighting, professional animated intro for streaming. Single high-impact frame designed for animation.`;
+        const buffer = await generateImageBuffer(videoPrompt, "1024x1024");
+        videoUrl = `data:image/png;base64,${buffer.toString("base64")}`;
       }
-    } else {
-      const videoPrompt = `${MASTER_CONSISTENCY_PREFIX} Style: ${style}. Cinematic streaming intro frame: ${promptBase}. Epic dramatic scene, particle effects, dynamic lighting, professional animated intro for streaming. Single high-impact frame designed for animation.`;
-      const buffer = await generateImageBuffer(videoPrompt, "1024x1024");
+    } catch {
+      const { generateImageBuffer } = await getImageAiModule();
+      const fallbackPrompt = `Cinematic epic streaming intro concept art, style: ${style}, theme: ${promptBase}, dark dramatic atmosphere, particle effects, professional quality`;
+      const buffer = await generateImageBuffer(fallbackPrompt, "1024x1024");
       videoUrl = `data:image/png;base64,${buffer.toString("base64")}`;
     }
-  } catch {
-    const fallbackPrompt = `Cinematic epic streaming intro concept art, style: ${style}, theme: ${promptBase}, dark dramatic atmosphere, particle effects, professional quality`;
-    const buffer = await generateImageBuffer(fallbackPrompt, "1024x1024");
-    videoUrl = `data:image/png;base64,${buffer.toString("base64")}`;
+
+    await db.insert(generationsTable).values({
+      id: generationId,
+      sessionId: body.sessionId,
+      type: "video",
+      prompt: body.prompt,
+      aesthetic: body.style,
+      resultUrls: JSON.stringify(["[base64]"]),
+    });
+
+    const data = GenerateVideoResponse.parse({ videoUrl, generationId });
+    res.json(data);
+  } catch (err) {
+    res.status(503).json({ error: generationErrorMessage(err) });
   }
-
-  await db.insert(generationsTable).values({
-    id: generationId,
-    sessionId: body.sessionId,
-    type: "video",
-    prompt: body.prompt,
-    aesthetic: body.style,
-    resultUrls: JSON.stringify(["[base64]"]),
-  });
-
-  const data = GenerateVideoResponse.parse({ videoUrl, generationId });
-  res.json(data);
 });
 
 router.post("/chat", async (req, res) => {

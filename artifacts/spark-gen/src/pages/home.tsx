@@ -8,6 +8,7 @@ import {
   auth,
   createOrGetSession,
   googleLogin,
+  useHealthCheck,
 } from "@workspace/api-client-react";
 
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -402,10 +403,19 @@ export default function Home() {
 
   const handleThemeSelect = (theme: string) => {
     setSelectedImageTheme(theme);
-    if (THEME_PROMPTS[theme] && !prompt.trim()) setPrompt(THEME_PROMPTS[theme]);
+    if (!prompt.trim()) {
+      setPrompt(
+        THEME_PROMPTS[theme] ??
+          `${theme} streamer character, cinematic background, detailed lighting, professional stream overlay style`,
+      );
+    }
   };
 
   const isLocked = sessionData ? !sessionData.isTrialActive && !sessionData.isPlanActive : false;
+  const { error: healthError } = useHealthCheck({
+    query: { retry: false, refetchOnWindowFocus: false },
+  });
+  const backendUnavailable = Boolean(healthError);
 
  
 
@@ -592,6 +602,14 @@ const handleGoogleAuth = async () => {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-[#050505]" />
           <FireParticles />
+          {backendUnavailable && (
+            <div className="relative z-20 mx-auto mt-4 max-w-4xl px-4">
+              <div className="rounded-xl border border-amber-500/40 bg-amber-950/50 px-4 py-3 text-xs text-amber-200">
+                API backend is not reachable. Set `VITE_API_BASE_URL` to your deployed API server URL
+                so login sessions, image generation, and video generation work.
+              </div>
+            </div>
+          )}
 
           {phase === "splash" ? (
             <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-16 gap-8">
@@ -694,6 +712,15 @@ const handleGoogleAuth = async () => {
           <button onClick={logout} className="text-white/25 hover:text-white/50 transition-colors"><LogOut className="w-4 h-4" /></button>
         </div>
       </nav>
+
+      {backendUnavailable && (
+        <div className="mx-auto mt-3 max-w-5xl px-4">
+          <div className="rounded-xl border border-amber-500/40 bg-amber-950/50 px-4 py-3 text-xs text-amber-200">
+            API backend is not reachable from this frontend domain. Configure `VITE_API_BASE_URL` to
+            your deployed API service and redeploy.
+          </div>
+        </div>
+      )}
 
       {sessionData && <CountdownBar trialEndsAt={sessionData.trialEndsAt} />}
 
